@@ -2,6 +2,8 @@
 ## **创建scrapy爬虫项目**
 ```python scrapy startproject 项目名称```
 ## **创建爬虫模板文件**
+根据指定域名（网站名称）创建初始的爬虫文件
+
 ```python scrapy genspider 文件名 "域名" # 文件名不能和项目名一样```
 ## **运行scrapy项目**
 ```python scrapy crawl 爬虫项目名称（记得去除robot协议）```

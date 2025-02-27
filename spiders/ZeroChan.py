@@ -1,21 +1,26 @@
 import random
 import time
 import re
+from typing import Iterable, Any
+
 import scrapy
 import requests
 import json
+
+from scrapy import Request
+from scrapy.http import Response
+
 from scrapy_learn.items import ScrapyLearnItem
 
-character = "Hoshimi+Miyabi"
+character = "Burnice"
 
 
 class ZerochanSpider(scrapy.Spider):
-    name = "ZeroChan"
-    allowed_domains = ["www.zerochan.net"]
+    name = "ZeroChan"  # 爬虫识别名称（唯一）
+    allowed_domains = ["www.zerochan.net", "static.zerochan.net"]
     start_urls = ["https://www.zerochan.net/login"]
 
-    def parse(self, response):
-
+    def start_requests(self) -> Iterable[Request]:
         formData = {
             'ref': '/',
             'name': 'Moran',
@@ -35,15 +40,16 @@ class ZerochanSpider(scrapy.Spider):
         session.post(url='https://www.zerochan.net/login', data=formData, headers=self.default_headers)
         # print(str(session.cookies))
 
-        for i in range(1, 9):
+        for i in range(1, 5):
             url = f'https://www.zerochan.net/{character}?s=fav&p=' + str(i)
-            yield scrapy.Request(url=url, cookies=session.cookies.get_dict(), callback=self.parse_data)
-            time.sleep(random.uniform(0.5, 1.5))
+            yield scrapy.Request(url=url, cookies=session.cookies.get_dict())
+            # time.sleep(random.uniform(0.5, 1.5))
 
-    def parse_data(self, response):
+    def parse(self, response: Response, **kwargs: Any) -> Any:
         character_new = re.sub('\+', '\+', character)
         page = int(
-            re.search(pattern=f'(?<=https://www.zerochan.net/{character_new}\?s=fav&p=)(\d+)', string=response.url).group())
+            re.search(pattern=f'(?<=https://www.zerochan.net/{character_new}\?s=fav&p=)(\d+)',
+                      string=response.url).group())
         if page == 1:
             script = response.xpath('//*[@id="content"]/script[2]/text()').extract_first()
         else:
@@ -54,4 +60,6 @@ class ZerochanSpider(scrapy.Spider):
             position, url = item['position'], [item['url']]
             image = ScrapyLearnItem(position=position, file_urls=url)
             yield image
-            time.sleep(random.uniform(1.5, 2.5))
+            # time.sleep(random.uniform(1.5, 2.5))
+
+

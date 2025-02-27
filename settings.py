@@ -1,5 +1,7 @@
 import os
 
+import scrapy_learn.pipelines
+
 # Scrapy settings for scrapy_learn project
 #
 # For simplicity, this file contains only settings considered important or
@@ -15,10 +17,11 @@ SPIDER_MODULES = ["scrapy_learn.spiders"]
 NEWSPIDER_MODULE = "scrapy_learn.spiders"
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36"
+USER_AGENT = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 "
+              "Safari/537.36")
 
 # Obey robots.txt rules
-# ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 # CONCURRENT_REQUESTS = 32
@@ -26,7 +29,8 @@ USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-# DOWNLOAD_DELAY = 3
+DOWNLOAD_DELAY = 1
+RANDOMIZE_DOWNLOAD_DELAY = True
 # The download delay setting will honor only one of:
 # CONCURRENT_REQUESTS_PER_DOMAIN = 16
 # CONCURRENT_REQUESTS_PER_IP = 16
@@ -38,10 +42,27 @@ USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 # TELNETCONSOLE_ENABLED = False
 
 # Override the default request headers:
+# zerochan请求头
 # DEFAULT_REQUEST_HEADERS = {
-#    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-#    "Accept-Language": "en",
+#     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 '
+#                   'Safari/537.36',
+#     'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,'
+#               'application/signed-exchange;v=b3;q=0.7',
+#     'accept-encoding': 'gzip, deflate, br, zstd',
+#     'accept-language': 'zh-CN,zh;q=0.9,en;q=0.8',
+#     'referer': 'https://www.zerochan.net/',
 # }
+
+# 极简壁纸请求头
+DEFAULT_REQUEST_HEADERS = {
+    "authority": "api.zzzmh.cn",
+    "accept": "application/json, text/plain, */*",
+    "content-type": "application/json;charset=UTF-8",
+    "origin": "https://bz.zzzmh.cn",
+    "referer": "https://bz.zzzmh.cn/",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"
+}
+
 
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
@@ -64,7 +85,10 @@ USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    "scrapy_learn.pipelines.ZeroChanImageDownloadPipeline": 300,
+    # "scrapy_learn.pipelines.ZeroChanImageDownloadPipeline": 300,
+    # 'scrapy.pipelines.files.FilesPipeline': 1,
+    # "scrapy_learn.pipelines.ZeroChanFilePipeline": 300,
+    "scrapy_learn.pipelines.SimpleWallpaperFilePipeline": 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -93,4 +117,4 @@ REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
 LOG_LEVEL = 'ERROR'
-FILE_STORE = "D:\\Python Project\\Image Download"
+FILE_STORE = "D:\\Python Project\\scrapy_learn\\Image Download"

@@ -1,8 +1,8 @@
 import requests
-import urllib
 import os
 import re
 from scrapy_learn.spiders.ZeroChan import character
+from scrapy.pipelines.files import FilesPipeline
 
 
 class ScrapyLearnPipeline:
@@ -29,7 +29,7 @@ class ZeroChanImageDownloadPipeline(object):
         print(res)
         file_name = f'{item["position"]}-{res}'
         print(item["file_urls"][0])
-        response = requests.get(item["file_urls"][0], stream=True,headers=self.default_headers)
+        response = requests.get(item["file_urls"][0], stream=True, headers=self.default_headers)
         # 检查请求是否成功
         if response.status_code == 200:
             # 打开一个文件用于写入二进制数据
@@ -43,3 +43,24 @@ class ZeroChanImageDownloadPipeline(object):
             print(f"请求失败，状态码: {response.status_code}")
         # urllib.request.urlretrieve(url=item["file_urls"][0], filename=os.path.join(self.image_path, file_name))
         return item
+
+
+class ZeroChanFilePipeline(FilesPipeline):
+    def file_path(self, request, response=None, info=None, *, item=None):
+        image_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), character)
+        if not os.path.exists(image_path):
+            os.mkdir(image_path)
+        res = re.search(pattern='(?<=https://static\.zerochan\.net/)(.*)', string=item["file_urls"][0]).group()
+        file_name = f'{item["position"]}-{res}'
+        print(f'{res}:{item["file_urls"][0]}')
+        return os.path.join(image_path, file_name)
+
+
+class SimpleWallpaperFilePipeline(FilesPipeline):
+    def file_path(self, request, response=None, info=None, *, item=None):
+        file_name = re.search(pattern='wallpaper/origin/(.*)\?', string=request.url).group(1)
+        print(f'Start Download {file_name}')
+        image_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "SimpleWallpapers")
+        if not os.path.exists(image_path):
+            os.mkdir(image_path)
+        return os.path.join(image_path, file_name)
