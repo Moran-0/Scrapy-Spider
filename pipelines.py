@@ -64,3 +64,13 @@ class SimpleWallpaperFilePipeline(FilesPipeline):
         if not os.path.exists(image_path):
             os.mkdir(image_path)
         return os.path.join(image_path, file_name)
+
+
+class KonachanFilePipeline(FilesPipeline):
+    def file_path(self, request, response=None, info=None, *, item=None):
+        file_name = re.search(pattern='/(Konachan.com.*?\.(jpg|png))', string=request.url).group(1)
+        print(f'Start Download {file_name}')
+        image_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "Konachan")
+        if not os.path.exists(image_path):
+            os.mkdir(image_path)
+        return os.path.join(image_path, file_name)

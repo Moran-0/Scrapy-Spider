@@ -17,3 +17,8 @@ class ScrapyLearnItem(scrapy.Item):
 class SimpleWallpaperItem(scrapy.Item):
     file_urls = scrapy.Field()
     files = scrapy.Field()
+
+
+class KonachanItem(scrapy.Item):
+    file_urls = scrapy.Field()
+    files = scrapy.Field()

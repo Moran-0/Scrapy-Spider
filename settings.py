@@ -54,15 +54,20 @@ RANDOMIZE_DOWNLOAD_DELAY = True
 # }
 
 # 极简壁纸请求头
+# DEFAULT_REQUEST_HEADERS = {
+#     "authority": "api.zzzmh.cn",
+#     "accept": "application/json, text/plain, */*",
+#     "content-type": "application/json;charset=UTF-8",
+#     "origin": "https://bz.zzzmh.cn",
+#     "referer": "https://bz.zzzmh.cn/",
+#     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"
+# }
+# konachan网站请求头
 DEFAULT_REQUEST_HEADERS = {
-    "authority": "api.zzzmh.cn",
+    "authority": "konachan.net",
     "accept": "application/json, text/plain, */*",
-    "content-type": "application/json;charset=UTF-8",
-    "origin": "https://bz.zzzmh.cn",
-    "referer": "https://bz.zzzmh.cn/",
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"
 }
-
 
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
@@ -88,7 +93,8 @@ ITEM_PIPELINES = {
     # "scrapy_learn.pipelines.ZeroChanImageDownloadPipeline": 300,
     # 'scrapy.pipelines.files.FilesPipeline': 1,
     # "scrapy_learn.pipelines.ZeroChanFilePipeline": 300,
-    "scrapy_learn.pipelines.SimpleWallpaperFilePipeline": 300,
+    # "scrapy_learn.pipelines.SimpleWallpaperFilePipeline": 300,
+    "scrapy_learn.pipelines.KonachanFilePipeline": 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -117,4 +123,4 @@ REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
 LOG_LEVEL = 'ERROR'
-FILE_STORE = "D:\\Python Project\\scrapy_learn\\Image Download"
+FILE_STORE = "D:\\Python Project\\scrapy_learn\\File_Save"
